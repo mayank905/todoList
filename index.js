@@ -2,9 +2,9 @@ let form =document.getElementById('form1')
 let itemList=document.getElementById('list1')
 let storeObject=[]
 let counter=0
-
-
-
+console.log(JSON.parse(localStorage.getItem('array')))
+storeObject=JSON.parse(localStorage.getItem('array')).slice(0)
+refreshDom()
  form.addEventListener('submit',addItem);
  itemList.addEventListener("click", deleteItem)
 
@@ -13,6 +13,9 @@ let counter=0
 function addItem(e){
      //update array
     e.preventDefault()
+
+    // storeObject=JSON.parse(localStorage.getItem('array')).slice(0)
+    localStorage.clear();
     if(document.getElementById('text1').value){
     let jsonobj={'name':document.getElementById('text1').value,'status':false}
 
@@ -20,12 +23,14 @@ function addItem(e){
      refreshDom(e)
     document.getElementById('text1').value="";}
     else {refreshDom(e)}
-    //localStorage.setItem('array',storeObject)
+    localStorage.setItem('array',JSON.stringify(storeObject))
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 function deleteItem(e){
      //update array
+    // storeObject=JSON.parse(localStorage.getItem('array')).slice(0)
+    localStorage.clear();
     let position1=e.target.parentNode.attributes.position.value
 
     if(e.target.classList.contains('buttonelement')&&(storeObject[position1].status==true))
@@ -43,14 +48,12 @@ function deleteItem(e){
         storeObject[position1].status=true;
         refreshDom(e)
 
-        // e.target.nextElementSibling.style.textDecoration='line-through';
     }
     else if((e.target.checked==false)&& (e.target.classList.contains('checkbox'))){
-        // e.target.nextElementSibling.style.textDecoration='none'
         storeObject[position1].status=false;
         refreshDom(e)
     }
-    //localStorage.setItem('array',storeObject)
+    localStorage.setItem('array',JSON.stringify(storeObject))
 
 
 }
@@ -62,8 +65,7 @@ function refreshDom(e){
      while(itemList.hasChildNodes()){
           itemList.removeChild(itemList.firstChild);
       }
-      //storeObject=localStorage.getItem('array').slice(0)
-     // localStorage.clear();
+
      for(let i=0;i<storeObject.length;i++){
             let itemName=storeObject[i].name
             let itemStatus=storeObject[i].status
@@ -99,8 +101,6 @@ function refreshDom(e){
             div1.appendChild(deleteBtn)
            // localStorage.setItem("firsttry",JSON.stringify(""+div1))
             itemList.appendChild(div1)
-
-
 
      }
 }
